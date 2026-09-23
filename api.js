@@ -1,20 +1,8 @@
-/* ==========================================================================
-   api.js — REST API client
-   Talks to FakeStoreAPI (https://fakestoreapi.com). All network access is
-   isolated here so app.js never touches fetch() directly.
-   ========================================================================== */
-
 const API_BASE = "https://fakestoreapi.com";
-
-/**
- * Generic fetch wrapper: adds a timeout, checks response.ok, and
- * normalizes errors into a single shape the UI layer can render.
- */
 async function request(path, { signal } = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
-  // Let an external signal (e.g. a cancelled search) abort us too.
   if (signal) signal.addEventListener("abort", () => controller.abort());
 
   try {
@@ -33,17 +21,14 @@ async function request(path, { signal } = {}) {
   }
 }
 
-/** Fetch every product. */
 export async function fetchProducts(signal) {
   return request("/products", { signal });
 }
 
-/** Fetch the list of product categories. */
 export async function fetchCategories(signal) {
   return request("/products/categories", { signal });
 }
 
-/** Fetch products for a single category ("all" bypasses filtering here). */
 export async function fetchProductsByCategory(category, signal) {
   if (!category || category === "all") return fetchProducts(signal);
   return request(`/products/category/${encodeURIComponent(category)}`, { signal });
