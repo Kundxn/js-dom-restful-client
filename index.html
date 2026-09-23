@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Storefront — Live REST API Client</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="toolbar">
+    <h1>Storefront</h1>
+    <input id="search-input" type="search" placeholder="Search products…" aria-label="Search products" />
+    <select id="sort-select" aria-label="Sort products">
+      <option value="default">Sort: default</option>
+      <option value="price-asc">Price: low to high</option>
+      <option value="price-desc">Price: high to low</option>
+      <option value="rating-desc">Rating: high to low</option>
+    </select>
+  </header>
+
+  <nav id="category-tabs" class="tabs" aria-label="Filter by category"></nav>
+
+  <p id="error-banner" class="error-banner" role="alert" hidden></p>
+  <p id="result-count" class="result-count"></p>
+
+  <main id="product-grid" class="product-grid"></main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
