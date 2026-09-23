@@ -1,9 +1,3 @@
-/* ==========================================================================
-   app.js — DOM logic & client state
-   Owns rendering, search/filter/sort, localStorage caching, and error/
-   loading UI. All network calls are delegated to api.js.
-   ========================================================================== */
-
 import { fetchProducts, fetchCategories } from "./api.js";
 
 const CACHE_KEY = "storefront:cache:v1";
@@ -18,7 +12,6 @@ const els = {
   resultCount: document.getElementById("result-count"),
 };
 
-/** In-memory client state. Filtering/sorting never re-hits the network. */
 const state = {
   allProducts: [],
   categories: ["all"],
@@ -29,9 +22,6 @@ const state = {
 
 let activeController = null;
 
-/* ---------------------------------- */
-/* Local cache helpers                */
-/* ---------------------------------- */
 function readCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
@@ -40,7 +30,7 @@ function readCache() {
     if (Date.now() - parsed.savedAt > CACHE_TTL_MS) return null;
     return parsed;
   } catch {
-    return null; // corrupted cache is treated as a miss, never a crash
+    return null; 
   }
 }
 
@@ -51,14 +41,10 @@ function writeCache(products, categories) {
       JSON.stringify({ products, categories, savedAt: Date.now() })
     );
   } catch {
-    // Storage full or unavailable (private browsing) — fail silently,
-    // the app still works without caching.
+
   }
 }
 
-/* ---------------------------------- */
-/* Error / loading UI                 */
-/* ---------------------------------- */
 function showError(message) {
   els.errorBanner.textContent = message;
   els.errorBanner.hidden = false;
@@ -75,9 +61,6 @@ function renderSkeleton(count = 8) {
     .join("");
 }
 
-/* ---------------------------------- */
-/* Rendering                          */
-/* ---------------------------------- */
 function renderTabs() {
   els.tabs.innerHTML = state.categories
     .map(
@@ -140,9 +123,7 @@ function render() {
   renderProducts();
 }
 
-/* ---------------------------------- */
-/* Data loading                       */
-/* ---------------------------------- */
+
 async function loadData() {
   clearError();
 
@@ -151,7 +132,7 @@ async function loadData() {
     state.allProducts = cached.products;
     state.categories = ["all", ...cached.categories];
     render();
-    return; // Cache hit: skip the network entirely.
+    return; 
   }
 
   renderSkeleton();
@@ -175,9 +156,7 @@ async function loadData() {
   }
 }
 
-/* ---------------------------------- */
-/* Event wiring (no full-page reload) */
-/* ---------------------------------- */
+
 function debounce(fn, delay = 250) {
   let timer;
   return (...args) => {
